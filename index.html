@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>💖For My Ross 💖</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background: linear-gradient(120deg, #fbc2eb, #a6c1ee);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    transition: background 10s ease;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  #mensaje {
+    font-size: 1.5em;
+    margin: 20px;
+    min-height: 80px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  #contador {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+
+  button {
+    background: #ff4b5c;
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #ff1e40;
+  }
+
+  .corazones {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .corazon {
+    position: absolute;
+    font-size: 24px;
+    animation: flotar 6s forwards;
+    opacity: 0.8;
+  }
+
+  @keyframes flotar {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+
+  .particula {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff1e40;
+    pointer-events: none;
+    opacity: 1;
+  }
+
+  footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+</style>
+</head>
+<body>
+<h1> ✨💌 Hay un nuevo mensaje especial para ti 💌✨</h1>
+<div id="contador"></div>
+<div id="mensaje">Presiona el botón para desbloquear 😄</div>
+<button onclick="mostrarFrase()"> unlok 🔓 </button>
+<div class="corazones" id="corazones"></div>
+<footer>®By Eduardito 💖</footer>
+
+<script>
+const frases = [
+"El sol se esconde, pero tu sonrisa brilla ✨",
+"Pequeños momentos hacen grandes recuerdos 🌸",
+"Cada estrella del cielo guarda un deseo para ti 🌟",
+"Las flores bailan con tu alegría 💐",
+"Un suspiro tuyo alegra mi corazón 💖",
+"La luna te mira y sonríe 🌙",
+"El viento canta canciones de amor por ti 🍃",
+"Cada amanecer trae un abrazo tuyo en el alma 🌅",
+"Tu risa es la melodía más dulce 🎶",
+"Los árboles susurran historias de tu ternura 🌳",
+"El cielo azul se pinta de tu alegría ☀️",
+"Cada gota de lluvia lleva un beso para ti 🌧️",
+"Tus pasos dejan huellas de luz ✨",
+"El arcoíris aparece solo para recordarte 🌈",
+"Tus sueños vuelan alto como cometas 🪁",
+"Cada pétalo lleva tu esencia 🌺",
+"Tu mirada ilumina los rincones oscuros 🌟",
+"El mar susurra tu nombre en cada ola 🌊",
+"Cada noche guarda un secreto de tu belleza 🌌",
+"El tiempo se detiene cuando sonríes ⏳",
+"Tu voz es un río que calma el corazón 💦",
+"Cada día contigo es un poema 🎵",
+"La brisa acaricia tu risa suave 🌬️",
+"Tu energía hace bailar a las hojas 🍂",
+"Cada nube se viste de colores por ti ☁️",
+"Tu ternura ilumina cualquier sombra 🌟",
+"El horizonte guarda tus sueños más bonitos 🌅",
+"Cada mirada tuya es un abrazo silencioso 🤗",
+"La música se detiene para escucharte 🎶",
+"Tu alegría es contagiosa como el sol ☀️",
+"El mar refleja tu risa en sus olas 🌊",
+"Cada flor abre su corazón para ti 🌸",
+"Tu imaginación pinta mundos mágicos ✨",
+"El viento lleva tu nombre entre susurros 🍃",
+"Cada estrella brilla por tu ternura 🌟",
+"Tu presencia convierte días grises en claros 🌤️",
+"Los árboles se inclinan ante tu bondad 🌳",
+"Tu risa hace eco en los rincones felices 😄",
+"Cada instante contigo es un regalo 🎁",
+"La luna guarda secretos de tu sonrisa 🌙",
+"Tu corazón late al ritmo del universo 💓",
+"Cada amanecer recuerda tu magia 🌅",
+"Tu creatividad ilumina los cielos ✨",
+"El río murmura historias de tu alegría 🌊",
+"Cada paso que das deja luz detrás ✨",
+"Tu sonrisa rompe las nubes grises ☁️",
+"Cada gota de lluvia canta tu nombre 🌧️",
+"Tu mirada es un faro en la oscuridad 🌟",
+"El cielo se viste de fiesta por ti 🎉",
+"Cada flor murmura secretos de amor 🌸",
+"Tu risa es un hechizo que alegra almas 🪄",
+"Cada melodía nace de tu alegría 🎵",
+"El viento acaricia tu pelo con ternura 🌬️",
+"Cada estrella guía tus sueños 🌟",
+"Tu corazón es un océano de bondad 🌊",
+"Cada suspiro tuyo es poesía 💖",
+"Tu energía hace bailar a las nubes ☁️",
+"Cada abrazo tuyo es un tesoro 🤗",
+"Tu presencia transforma lo ordinario en mágico ✨",
+"Cada día contigo es un arcoíris 🌈",
+"Tu risa es el sol en los días nublados ☀️",
+"Cada palabra tuya es melodía 🎶",
+"Tu mirada es un jardín de esperanza 🌷",
+"Cada noche contigo es un cielo estrellado 🌌",
+"Tu sonrisa es la mejor banda sonora 🎵",
+"Cada momento es un instante eterno contigo ⏳",
+"Tu alegría es la chispa que enciende todo 🔥",
+"Cada aventura contigo es un poema 🏔️",
+"Tu ternura hace danzar a las flores 🌺",
+"Cada idea tuya brilla como mil luces 💡",
+"Tu creatividad puede mover montañas ⛰️",
+"Cada gesto tuyo tiene magia ✨",
+"Tu entusiasmo ilumina cualquier rincón 🌟",
+"Cada risa tuya es una melodía 🎶",
+"Tu imaginación pinta arcoíris en el cielo 🌈",
+"Cada día contigo es un regalo 🎁",
+"Tu voz calma tormentas 🌊",
+"Cada pensamiento tuyo es poesía 💖",
+"Tu energía hace bailar los árboles 🌳",
+"Cada mirada tuya es un abrazo 🤗",
+"Tu sonrisa rompe cualquier oscuridad 🌙",
+"Cada paso que das deja luz detrás ✨",
+"Tu ternura transforma todo a su paso 🌸",
+"Cada palabra tuya acaricia el alma 💓",
+"Tu alegría es contagiosa como el sol ☀️",
+"Cada sueño tuyo es una estrella 🌟",
+"Tu risa es música que alegra corazones 🎶",
+"Cada momento contigo es mágico ✨",
+"Tu presencia convierte lo ordinario en extraordinario 🌈",
+"Cada abrazo tuyo es un refugio 🤗",
+"Tu creatividad hace bailar a los colores 🎨",
+"Cada día contigo es una nueva canción 🎵",
+"Tu sonrisa ilumina los rincones más oscuros 🌙",
+"Cada gesto tuyo inspira a otros 🌟",
+"Tu energía hace florecer los jardines 🌸",
+"Cada idea tuya es un destello de luz ✨",
+"Tu ternura llena el universo 💖",
+"Cada risa tuya es un sol radiante ☀️",
+"Tu alegría es un río que nunca se detiene 🌊",
+"Cada mirada tuya cuenta una historia 🌟",
+"Tu imaginación construye mundos mágicos 🌌",
+"Cada paso que das deja huellas de luz ✨",
+"Tu voz es la melodía que alegra los días 🎶",
+"Cada momento contigo es un regalo para el alma 🎁",
+"Tu sonrisa es la chispa que enciende corazones 🔥",
+"Cada día contigo es un cielo lleno de estrellas 🌌",
+"Tu ternura es un faro en la noche 🌙",
+"Cada abrazo tuyo transforma todo a su paso 🤗",
+"Tu energía ilumina hasta los rincones más oscuros 🌟",
+"Cada palabra tuya acaricia el corazón 💖",
+"Tu alegría es un arcoíris que aparece después de la tormenta 🌈",
+"Cada idea tuya es un pequeño milagro ✨",
+  "Hoy tu risa debería ser declarada Patrimonio de la Humanidad 😄",
+  "Si fueras un helado, serías doble chocolate con caramelo 🍫🍬",
+  "Hoy es un gran día para ser increíble… y tú lo eres 🌟",
+  "Cada pequeño detalle de ti es fascinante ✨",
+  "Tu sonrisa tiene superpoderes 😁",
+  "El mundo brilla más cuando tú estás cerca ☀️",
+  "Hoy podrías ser la estrella principal de cualquier película 🌟",
+  "Si fueras un café, serías el más dulce ☕🍯",
+  "Tus ideas son más brillantes que mil luces 💡",
+  "Eres como un arcoíris después de la lluvia 🌈",
+  "Tu energía hace bailar a las plantas 💃🌱",
+  "Si fueras un animal, serías un gatito adorable 🐱",
+  "Hoy todo parece más bonito gracias a ti 🌸",
+  "Si fueras un libro, todos querrían leerte 📖",
+  "Tu creatividad no tiene límites ✨",
+  "Hoy las nubes parecen sonreír contigo ☁️😄",
+  "Si fueras un helado, fundirías corazones 🍦💖",
+  "Tu entusiasmo es contagioso 😍",
+  "Cada vez que ríes, alguien en el mundo se alegra 😄",
+  "Si fueras un emoji, serías el más brillante 😎",
+  "Tu presencia convierte días comunes en especiales 🌟",
+  "Si fueras una canción, serías un hit que no puedo dejar de escuchar 🎵",
+  "Hoy las flores parecen inclinarse ante ti 🌷",
+  "Si fueras un postre, todos querrían probarte 🍰",
+  "Tu energía positiva puede iluminar una ciudad 🌆✨",
+  "Si fueras una bebida, serías refrescante y dulce 🍹",
+  "Hoy los pájaros cantan solo para ti 🐦🎶",
+  "Tu imaginación puede construir mundos enteros 🌌",
+  "Si fueras un dulce, serías el más irresistible 🍬",
+  "Hoy hasta las estrellas parecen girar a tu ritmo ✨🌠",
+  "Tu risa es un hechizo que alegra corazones 🪄💖",
+  "Si fueras una pintura, todos querrían admirarte 🖌️",
+  "Hoy los colores parecen más vivos contigo 🎨",
+  "Si fueras un planeta, tendrías su propio brillo 🌍✨",
+  "Tu alegría hace que los días grises desaparezcan 🌤️",
+  "Si fueras un perfume, todos querrían tu aroma 🌹",
+  "Hoy cada paso tuyo deja un rastro de luz 🌟",
+  "Tu curiosidad puede mover montañas ⛰️",
+  "Si fueras un animal, todos querrían abrazarte 🐻",
+  "Hoy la música suena más dulce gracias a ti 🎶",
+  "Si fueras un árbol, darías la sombra más acogedora 🌳",
+  "Tu creatividad puede pintar el cielo de mil colores 🌈",
+  "Si fueras una estrella, iluminarías galaxias enteras ✨",
+  "Hoy el viento lleva tu risa a todos lados 🌬️😄",
+  "Si fueras un dulce, serías el más codiciado 🍫",
+  "Tu entusiasmo puede encender cualquier lugar 🔥",
+  "Si fueras un río, fluirías lleno de alegría 🌊",
+  "Hoy los días parecen más cortos de lo felices que nos haces 🕊️",
+  "Si fueras una flor, serías la más rara y preciosa 🌺",
+  "Tu sonrisa tiene el poder de cambiar el mundo 🌎",
+  "Si fueras un objeto, todos querrían tenerte cerca 🏆",
+  "Hoy cada momento parece un regalo gracias a ti 🎁",
+  "Si fueras una aventura, todos querrían acompañarte 🏔️",
+  "Tu optimismo ilumina incluso la noche más oscura 🌙",
+  "Si fueras un caramelo, derretirías cualquier corazón 🍭",
+  "Hoy todo lo que tocas se vuelve especial ✨",
+  "Si fueras un paseo, sería el más emocionante 🚲",
+  "Tu voz puede calmar tormentas 🌊",
+  "Si fueras un cielo, siempre sería azul y brillante ☀️",
+  "Hoy tu risa resuena en los rincones más felices 😄",
+  "Si fueras un sueño, nadie querría despertar 🛌",
+  "Tu presencia hace que todo sea más divertido 🎉",
+  "Si fueras una chispa, encenderías mil sonrisas 🔥"
+];
+
+const cooldown = 5 * 60 * 60 * 1000; // 5 horas
+const mensaje = document.getElementById('mensaje');
+const contadorDiv = document.getElementById('contador');
+
+function mostrarFrase() {
+  const ultimaVez = localStorage.getItem('ultimaFrase');
+  const ahora = new Date().getTime();
+
+  if (ultimaVez && ahora - ultimaVez < cooldown) {
+    const tiempoRestante = cooldown - (ahora - ultimaVez);
+    mostrarContador(tiempoRestante);
+    return;
+  }
+
+  const index = Math.floor(Math.random() * frases.length);
+  mensaje.style.opacity = 0;
+  mensaje.style.transform = "scale(0.8)";
+  setTimeout(() => {
+    mensaje.innerHTML = frases[index];
+    mensaje.style.opacity = 1;
+    mensaje.style.transform = "scale(1)";
+    localStorage.setItem('ultimaFrase', ahora);
+    contadorDiv.innerHTML = '';
+  }, 500);
+}
+
+function mostrarContador(tiempoRestante) {
+  let horas = Math.floor(tiempoRestante / 3600000);
+  let minutos = Math.floor((tiempoRestante % 3600000) / 60000);
+  let segundos = Math.floor((tiempoRestante % 60000) / 1000);
+  contadorDiv.innerHTML = `⏳Mi amor debes esperar ${horas}h ${minutos}m ${segundos}s para desbloquear la siguiente frase 😋`;
+
+}
+
+
+setInterval(() => {
+  const ultimaVez = localStorage.getItem('ultimaFrase');
+  if (!ultimaVez) return;
+  const ahora = new Date().getTime();
+  const tiempoRestante = cooldown - (ahora - ultimaVez);
+  if (tiempoRestante > 0) {
+    mostrarContador(tiempoRestante);
+  } else {
+    contadorDiv.innerHTML = '';
+  }
+}, 1000);
+
+function crearCorazones() {
+  const corazones = document.getElementById('corazones');
+  const corazon = document.createElement('div');
+  corazon.classList.add('corazon');
+  corazon.style.left = Math.random() * 100 + "vw";
+  corazon.style.animationDuration = (3 + Math.random() * 3) + "s";
+  corazon.innerHTML = "❤️";
+  corazones.appendChild(corazon);
+
+  setTimeout(() => {
+    const rect = corazon.getBoundingClientRect();
+    crearExplosion(rect.left + rect.width/2, rect.top + rect.height/2);
+    corazones.removeChild(corazon);
+  }, 6000);
+}
+
+function crearExplosion(x, y) {
+  const corazones = document.getElementById('corazones');
+  for (let i = 0; i < 10; i++) {
+    const particula = document.createElement('div');
+    particula.classList.add('particula');
+    particula.style.left = x + 'px';
+    particula.style.top = y + 'px';
+    particula.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+    corazones.appendChild(particula);
+
+    const angulo = Math.random() * 2 * Math.PI;
+    const distancia = 50 + Math.random() * 50;
+    let dx = Math.cos(angulo) * distancia;
+    let dy = Math.sin(angulo) * distancia;
+
+    particula.animate([
+      { transform: 'translate(0,0)', opacity: 1 },
+      { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 }
+    ], { duration: 1000, easing: 'ease-out' });
+
+    setTimeout(() => { corazones.removeChild(particula); }, 1000);
+  }
+}
+
+setInterval(crearCorazones, 500);
+
+let hue = 0;
+setInterval(() => {
+  document.body.style.background = `linear-gradient(${hue}deg, #fbc2eb, #a6c1ee)`;
+  hue = (hue + 1) % 360;
+}, 100);
+</script>
+</body>
+</html>
